@@ -1,0 +1,41 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded Rect Background matching StockMaster Brand Indigo -->
+  <rect width="512" height="512" rx="128" fill="#5252f2"/>
+  
+  <!-- Main Isometric Box Body -->
+  <path 
+    d="M256 100L100 190V370L256 460L412 370V190L256 100Z" 
+    fill="white"
+  />
+  
+  <!-- Top Face Highlight for 3D depth -->
+  <path 
+    d="M256 100L100 190L256 280L412 190L256 100Z" 
+    fill="#eef2ff"
+  />
+  
+  <!-- Edge Definitions (Indigo Creases) -->
+  <path 
+    d="M100 190L256 280L412 190" 
+    stroke="#5252f2" 
+    stroke-width="24" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+  <path 
+    d="M256 280V460" 
+    stroke="#5252f2" 
+    stroke-width="24" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  />
+  
+  <!-- Top Flap Detail (Subtle highlight stripe) -->
+  <path 
+    d="M190 140L300 203" 
+    stroke="#5252f2" 
+    stroke-width="32" 
+    stroke-linecap="round" 
+    opacity="0.15"
+  />
+</svg>

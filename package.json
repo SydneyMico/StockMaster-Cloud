@@ -1,0 +1,27 @@
+
+{
+  "name": "stockmaster-cloud",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "postbuild": "node scripts/copy-pwa-assets.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "lucide-react": "^0.562.0",
+    "recharts": "^3.6.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.2",
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "@vitejs/plugin-react": "^4.3.0"
+  }
+}
