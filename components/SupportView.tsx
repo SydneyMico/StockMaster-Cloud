@@ -153,7 +153,16 @@ const SupportView: React.FC<SupportViewProps> = ({ lang, user }) => {
         .eq('company_id', user.companyId)
         .order('created_at', { ascending: false });
       
-      if (ticketData) setTickets(ticketData);
+      if (ticketData) {
+        try {
+          const seenKey = `stockmaster_seen_notifications_${user.companyId}`;
+          const seenIds: string[] = JSON.parse(localStorage.getItem(seenKey) || '[]');
+          const visible = ticketData.filter((t: any) => !(t.user_id === 'SYSTEM' && seenIds.includes(t.id)));
+          setTickets(visible);
+        } catch (err) {
+          setTickets(ticketData);
+        }
+      }
     } catch (err) {
       console.error("Support fetch error:", err);
     } finally {
@@ -163,6 +172,24 @@ const SupportView: React.FC<SupportViewProps> = ({ lang, user }) => {
 
   useEffect(() => {
     fetchSupportData();
+    // Mark current system messages as seen when opening the support hub so they don't reappear
+    try {
+      (async () => {
+        const { data: ticketData } = await supabase
+          .from('support_messages')
+          .select('id,company_id,user_id,created_at')
+          .eq('company_id', user.companyId)
+          .order('created_at', { ascending: false });
+        if (ticketData) {
+          const sysIds = ticketData.filter((t: any) => t.user_id === 'SYSTEM').map((t: any) => t.id);
+          const seenKey = `stockmaster_seen_notifications_${user.companyId}`;
+          const existing: string[] = JSON.parse(localStorage.getItem(seenKey) || '[]');
+          const union = Array.from(new Set([...existing, ...sysIds]));
+          localStorage.setItem(seenKey, JSON.stringify(union));
+        }
+      })();
+    } catch (err) {}
+
     const interval = setInterval(fetchSupportData, 45000);
     return () => clearInterval(interval);
   }, [user.companyId]);
@@ -255,15 +282,15 @@ const SupportView: React.FC<SupportViewProps> = ({ lang, user }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">{t('whatsapp_title')}</label>
-                <input type="text" value={contacts.whatsapp} onChange={e => setContacts({...contacts, whatsapp: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800" />
+                <input aria-label="WhatsApp contact" placeholder="WhatsApp number" type="text" value={contacts.whatsapp} onChange={e => setContacts({...contacts, whatsapp: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800" />
               </div>
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">{t('call_title')}</label>
-                <input type="text" value={contacts.phone} onChange={e => setContacts({...contacts, phone: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800" />
+                <input aria-label="Support phone" placeholder="Support phone" type="text" value={contacts.phone} onChange={e => setContacts({...contacts, phone: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800" />
               </div>
               <div className="space-y-2">
                 <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">{t('email_title')}</label>
-                <input type="text" value={contacts.email} onChange={e => setContacts({...contacts, email: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800" />
+                <input aria-label="Support email" placeholder="support@domain.com" type="text" value={contacts.email} onChange={e => setContacts({...contacts, email: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800" />
               </div>
             </div>
             <button onClick={handleSaveChannels} disabled={saving} className="px-8 py-4 bg-[#5252f2] text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl flex items-center gap-2 hover:bg-indigo-700 active:scale-95 transition-all">
@@ -297,11 +324,11 @@ const SupportView: React.FC<SupportViewProps> = ({ lang, user }) => {
               <form onSubmit={handleSubmitTicket} className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">{t('msg_subject')}</label>
-                  <input type="text" required value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/10 transition-all" />
+                  <input aria-label="Message subject" placeholder="Subject" type="text" required value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/10 transition-all" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2">{t('msg_body')}</label>
-                  <textarea rows={4} required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/10 transition-all resize-none" />
+                  <textarea aria-label="Message body" placeholder="Your message..." rows={4} required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none font-bold text-slate-800 focus:ring-4 focus:ring-indigo-500/10 transition-all resize-none" />
                 </div>
                 <button disabled={sending} className="w-full py-5 bg-[#5252f2] text-white rounded-2xl font-black uppercase tracking-widest text-[11px] shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 active:scale-95 transition-all">
                   {sending ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />} {t('btn_send')}

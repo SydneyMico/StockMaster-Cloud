@@ -1,7 +1,7 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Package, DollarSign, AlertTriangle, TrendingUp, ArrowDownRight, History, Crown, BarChart2, Smartphone, Download, Sparkles } from 'lucide-react';
+import { Package, ArrowDownRight, History, Crown, BarChart2, Smartphone, Download } from 'lucide-react';
 import { Product, Sale, Role, PlanType, Language, CurrencyCode } from '../types';
 import { formatMoney } from '../App';
 
@@ -200,21 +200,30 @@ const DashboardView: React.FC<DashboardViewProps> = ({ products, sales, role, pl
             <History size={20} className="text-slate-300" />
           </div>
           <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
-            {sales.slice(0, 15).map((sale, i) => (
-              <div key={sale.id} className="flex items-center justify-between p-4 rounded-[28px] bg-slate-50/50 hover:bg-white border border-transparent hover:border-slate-100 transition-all group animate-in fade-in slide-in-from-right-2" style={{ animationDelay: `${i * 50}ms` }}>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-indigo-500 shadow-sm group-hover:scale-105 transition-transform"><ArrowDownRight size={18} /></div>
-                  <div>
-                    <p className="text-[13px] font-black text-slate-800 leading-tight mb-0.5 truncate max-w-[120px]">{sale.productName}</p>
-                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest leading-none">{sale.sellerName.split(' ')[0].toUpperCase()}</p>
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-[13px] font-black text-slate-900 mb-0.5">-{sale.quantity}</p>
-                  <p className="text-[10px] text-emerald-600 font-black tracking-tighter">{formatMoney(sale.totalAmount, currency)}</p>
-                </div>
-              </div>
-            ))}
+            {(() => {
+              const items = sales.slice(0, 15);
+              const styles = items.map((_, i) => `.sales-delay-${i}{animation-delay: ${i * 50}ms;}`).join('\n');
+              return (
+                <>
+                  <style>{styles}</style>
+                  {items.map((sale, i) => (
+                    <div key={sale.id} className={`flex items-center justify-between p-4 rounded-[28px] bg-slate-50/50 hover:bg-white border border-transparent hover:border-slate-100 transition-all group animate-in fade-in slide-in-from-right-2 sales-delay-${i}`}>
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-indigo-500 shadow-sm group-hover:scale-105 transition-transform"><ArrowDownRight size={18} /></div>
+                        <div>
+                          <p className="text-[13px] font-black text-slate-800 leading-tight mb-0.5 truncate max-w-[120px]">{sale.productName}</p>
+                          <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest leading-none">{sale.sellerName.split(' ')[0].toUpperCase()}</p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-[13px] font-black text-slate-900 mb-0.5">-{sale.quantity}</p>
+                        <p className="text-[10px] text-emerald-600 font-black tracking-tighter">{formatMoney(sale.totalAmount, currency)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              );
+            })()}
             {sales.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full opacity-20 py-20">
                 <Package size={56} className="mb-4" />

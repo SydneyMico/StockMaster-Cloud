@@ -1,82 +1,34 @@
-
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { 
-  Building2, 
-  Search, 
-  X, 
-  ShieldCheck, 
-  Zap, 
-  Crown, 
-  Gem, 
-  User, 
-  Loader2, 
-  LayoutDashboard, 
-  Users, 
-  Wallet, 
-  Tag, 
-  History, 
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  Building2,
+  Search,
+  X,
+  ShieldCheck,
+  Zap,
+  Crown,
+  Loader2,
+  LayoutDashboard,
+  Users,
+  Wallet,
+  History,
   RefreshCw,
   Check,
   CreditCard,
-  Settings2,
   Save,
-  Globe,
   Coins,
-  ArrowRight,
-  Database,
   MessageCircle,
   Phone,
   Mail,
   Headset,
   MessageSquare,
   Reply,
-  CheckCircle2,
-  Clock,
   Send,
-  MailPlus,
-  Terminal,
-  SendHorizontal,
-  Shield,
-  Layers,
-  ArrowUpCircle,
-  Banknote,
-  FileText,
-  Settings,
-  ArrowRightLeft,
-  Calendar,
-  AlertCircle,
-  ChevronDown,
-  CheckCircle,
-  Diamond,
-  Activity,
-  SmartphoneNfc,
-  Info,
-  Lock,
-  Unlock,
-  Monitor,
-  Filter,
-  Fingerprint,
-  MailQuestion,
-  CalendarDays,
-  Code,
-  Tag as TagIcon,
-  LogIn,
-  LogOut,
-  Key,
-  Eye,
-  EyeOff,
-  UserCheck,
-  AlertTriangle,
-  ChevronUp,
-  ShieldX,
-  ShieldAlert,
-  MailCheck,
-  ExternalLink,
-  Menu,
-  MessageSquarePlus,
-  Radio,
   Inbox,
-  Link
+  Link,
+  Diamond,
+  Key,
+  Lock,
+  Settings
 } from 'lucide-react';
 import { supabase } from '../supabase';
 import { PlanType, ActivityLog, SupportTicket, User as UserType } from '../types';
@@ -539,9 +491,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <h3 className="text-lg sm:text-xl font-black text-white uppercase italic tracking-tighter">GATEWAY CONFIG</h3>
                   </div>
                   <div className="space-y-4">
-                     <div className="space-y-1.5"><label className="text-[8px] font-black text-slate-500 uppercase">MOMO NUMBER</label><input type="text" value={config.momo_number} onChange={e => setConfig({...config, momo_number: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black outline-none focus:border-indigo-500" /></div>
-                     <div className="space-y-1.5"><label className="text-[8px] font-black text-slate-500 uppercase">USSD CODE</label><input type="text" value={config.manual_ussd_code} onChange={e => setConfig({...config, manual_ussd_code: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-emerald-400 font-black outline-none focus:border-indigo-500" /></div>
-                     <div className="space-y-1.5"><label className="text-[8px] font-black text-slate-500 uppercase">PROMO LABEL</label><input type="text" value={config.discount_label} onChange={e => setConfig({...config, discount_label: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold text-xs outline-none" /></div>
+                     <div className="space-y-1.5"><label className="text-[8px] font-black text-slate-500 uppercase">MOMO NUMBER</label><input aria-label="MOMO number" placeholder="e.g. 07XXXXXXXX" type="text" value={config.momo_number} onChange={e => setConfig({...config, momo_number: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black outline-none focus:border-indigo-500" /></div>
+                     <div className="space-y-1.5"><label className="text-[8px] font-black text-slate-500 uppercase">USSD CODE</label><input aria-label="USSD code" placeholder="e.g. *182*8*1*" type="text" value={config.manual_ussd_code} onChange={e => setConfig({...config, manual_ussd_code: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-emerald-400 font-black outline-none focus:border-indigo-500" /></div>
+                     <div className="space-y-1.5"><label className="text-[8px] font-black text-slate-500 uppercase">PROMO LABEL</label><input aria-label="Promo label" placeholder="e.g. SALE" type="text" value={config.discount_label} onChange={e => setConfig({...config, discount_label: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-bold text-xs outline-none" /></div>
                   </div>
                 </div>
 
@@ -636,7 +588,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     {replyTicket ? (
                       <div className="space-y-6 animate-in slide-in-from-right-4 duration-300 flex-1 flex flex-col">
                          <div className="p-5 bg-white/5 border border-white/10 rounded-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-2"><button onClick={() => { setReplyTicket(null); setReplyText(''); }} className="text-slate-500 hover:text-white"><X size={14} /></button></div>
+                            <div className="absolute top-0 right-0 p-2"><button aria-label="Close reply" title="Close reply" onClick={() => { setReplyTicket(null); setReplyText(''); }} className="text-slate-500 hover:text-white"><X size={14} /></button></div>
                             <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Replying to {replyTicket.user_name}</p>
                             <h4 className="text-sm font-black text-white mb-2">{replyTicket.subject}</h4>
                             <p className="text-[10px] text-slate-400 italic">"{replyTicket.message}"</p>
@@ -768,7 +720,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <h3 className="text-xl sm:text-3xl font-black text-white italic tracking-tighter uppercase">LICENSE UPDATE</h3>
                     <p className="text-[8px] font-black text-[#5252f2] uppercase tracking-widest mt-1">FOR: {targetCompany.name}</p>
                  </div>
-                 <button onClick={() => setLicenseModalOpen(false)} className="p-2 bg-white/5 rounded-full text-slate-500"><X size={16} /></button>
+                 <button aria-label="Close modal" title="Close modal" onClick={() => setLicenseModalOpen(false)} className="p-2 bg-white/5 rounded-full text-slate-500"><X size={16} /></button>
               </div>
               
               <div className="space-y-6 sm:space-y-8 text-left">
@@ -837,8 +789,8 @@ const PriceTierBox = ({ title, monthly, yearly, setM, setY, color }: any) => (
       {title === 'GROWTH' ? <Zap size={14} className="text-indigo-400" /> : <Crown size={14} className="text-amber-500" />}
       <h4 className="text-[10px] font-black text-white uppercase tracking-widest">{title} PLAN</h4>
     </div>
-    <div className="space-y-1.5"><label className="text-[7px] font-black text-slate-600 uppercase">MONTHLY</label><input type="text" value={monthly} onChange={e => setM(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-base outline-none" /></div>
-    <div className="space-y-1.5"><label className="text-[7px] font-black text-slate-600 uppercase">YEARLY</label><input type="text" value={yearly} onChange={e => setY(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-base outline-none" /></div>
+    <div className="space-y-1.5"><label className="text-[7px] font-black text-slate-600 uppercase">MONTHLY</label><input aria-label={`${title} monthly price`} placeholder="Monthly price" type="text" value={monthly} onChange={e => setM(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-base outline-none" /></div>
+    <div className="space-y-1.5"><label className="text-[7px] font-black text-slate-600 uppercase">YEARLY</label><input aria-label={`${title} yearly price`} placeholder="Yearly price" type="text" value={yearly} onChange={e => setY(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black text-base outline-none" /></div>
   </div>
 );
 
