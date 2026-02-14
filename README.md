@@ -6,7 +6,7 @@
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1jacIxtY0AV8u0ryOoti8y2gWxHDw-WAG
+View your app in using this link: https://stockmaster-cloud.vercel.app/
 
 ## Run Locally
 
